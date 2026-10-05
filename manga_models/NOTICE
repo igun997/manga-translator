@@ -13,5 +13,8 @@ Licensed under the Apache License, Version 2.0; a copy is in LICENSE next to
 this file. No modifications were made to the weights themselves; the export
 only fixes the input shape and opset.
 
+These weights are a separate work from the rest of this package, which is
+MIT licensed (see the repository root LICENSE).
+
 Ultralytics YOLO software is licensed under AGPL-3.0. This project does not
 bundle or import Ultralytics: runtime inference uses onnxruntime only.
