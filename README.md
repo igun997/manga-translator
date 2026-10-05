@@ -311,32 +311,6 @@ with this project.
 
 `examples/` is gitignored: it is the place for your own scans.
 
-## Releasing
-
-`.github/workflows/publish.yml` publishes to PyPI when a `v*` tag is pushed,
-using [PyPI trusted publishing](https://docs.pypi.org/trusted-publishers/) — no
-API token is stored in the repository.
-
-One-time setup on PyPI (**Pending publisher** → *Add a new pending publisher*):
-
-| Field | Value |
-| --- | --- |
-| PyPI project name | `manga-translator` |
-| Owner | `igun997` |
-| Repository name | `manga-translator` |
-| Workflow name | `publish.yml` |
-| Environment name | `pypi` |
-
-Then create the matching environment under **Settings → Environments** in the
-repo. Release with:
-
-```sh
-git tag v0.3.0 && git push origin v0.3.0
-```
-
-Run the workflow manually with target `testpypi` to rehearse the upload
-(configure a second pending publisher with environment `testpypi`).
-
 ## License
 
 MIT — see [LICENSE](LICENSE). The bundled balloon model weights are Apache-2.0;
