@@ -1,0 +1,17 @@
+Bundled balloon detection model
+================================
+
+manga_models/bubble.onnx is an ONNX export (made by this project, fixed
+1600x1600 input) of the Ultralytics YOLO11n instance-segmentation weights
+"best.pt" from:
+
+    huyvux3005/manga109-segmentation-bubble
+    https://huggingface.co/huyvux3005/manga109-segmentation-bubble
+
+Trained by the MangaLens authors on MS92/MangaSegmentation and Manga109.
+Licensed under the Apache License, Version 2.0; a copy is in LICENSE next to
+this file. No modifications were made to the weights themselves; the export
+only fixes the input shape and opset.
+
+Ultralytics YOLO software is licensed under AGPL-3.0. This project does not
+bundle or import Ultralytics: runtime inference uses onnxruntime only.

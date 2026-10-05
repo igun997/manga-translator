@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "manga-translator"
+version = "0.3.0"
+description = "Offline-first manga translation CLI with optional LLM post-editing"
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Indra Gunanda" }]
+keywords = ["manga", "comic", "translation", "ocr", "tesseract", "argos", "offline"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: End Users/Desktop",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Multimedia :: Graphics",
+  "Topic :: Text Processing :: Linguistic",
+]
+dependencies = ["numpy>=1.26", "opencv-python-headless>=4.11", "Pillow>=10", "argostranslate>=1.11,<2", "PyYAML>=6", "onnxruntime>=1.17,<2"]
+
+[project.urls]
+Homepage = "https://github.com/igun997/manga-translator"
+Repository = "https://github.com/igun997/manga-translator"
+Issues = "https://github.com/igun997/manga-translator/issues"
+
+[project.scripts]
+manga-bubbles = "manga_bubbles:main"
+manga-translate = "manga_translate:main"
+
+[tool.setuptools]
+py-modules = ["manga_bubbles", "manga_translate", "offline_mt", "llm_corrector", "balloon_detector"]
+packages = ["manga_models"]
+
+[tool.setuptools.package-data]
+manga_models = ["*.onnx", "LICENSE", "NOTICE"]

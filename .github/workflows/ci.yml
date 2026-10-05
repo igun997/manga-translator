@@ -1,0 +1,71 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    name: tests (Python ${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+      - uses: ./.github/actions/setup
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run tests
+        run: .venv/bin/python -m unittest discover -s tests -v
+
+  resolve:
+    name: declared dependencies resolve
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - name: Resolve the published dependency set
+        run: |
+          uv venv --python 3.12
+          # Metadata-only: proves pyproject.toml is installable on a clean
+          # machine without downloading the heavy runtime wheels (PyTorch).
+          uv pip install --dry-run -e .
+
+  build:
+    name: build distribution
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.2.0
+      - run: uv build
+      - name: Check the bundled model ships in the wheel
+        run: |
+          python3 - <<'PY'
+          import glob, sys, zipfile
+
+          wheels = glob.glob("dist/*.whl")
+          if len(wheels) != 1:
+              sys.exit(f"expected exactly one wheel, found {wheels}")
+          names = zipfile.ZipFile(wheels[0]).namelist()
+          required = ("manga_models/bubble.onnx", "manga_models/LICENSE",
+                      "manga_models/NOTICE", "LICENSE")
+          missing = [n for n in required if not any(x.endswith(n) for x in names)]
+          if missing:
+              sys.exit(f"missing from {wheels[0]}: {missing}")
+          print(f"{wheels[0]} contains {len(names)} entries, model data present")
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: dist
+          path: dist/
+          if-no-files-found: error
